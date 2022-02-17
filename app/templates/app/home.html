@@ -7,7 +7,7 @@
     <title>Document</title>
 </head>
 <body>
-    <h3><a href="{% url 'url_welcome' %}">&larr; sair</a></h3>
+    <h3><a href="{% url 'url_exit' %}">&larr; sair</a></h3>
     <fieldset>
         <legend>Perfil</legend>
         <ul style="list-style: none;">
@@ -30,10 +30,10 @@
         <legend>Utilizadores</legend>
         <ul>
             <li><p>
-                <a>Criar utilizador</a>
+                <a href="{% url 'url_create_user' %}">Criar utilizador</a>
             </p></li>
             <li><p>
-                <a>Listar utilizadores</a>
+                <a href="{% url 'url_read_user' %}">Listar utilizadores</a>
             </p></li>
         </ul>
     </fieldset>

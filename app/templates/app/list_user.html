@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        table {
+            font-family: arial, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+        td, th {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+        tr:nth-child(even) {
+            background-color: #dddddd;
+        }
+    </style>
+</head>
+<body>
+    <h3><a href="{% url 'url_home' %}">&larr; voltar</a></h3>
+    <fieldset>
+        <legend>Lista de utilizadores</legend>
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>E-mail</th>
+                <th>Último login</th>
+                <th>Adesão</th>
+                <th>Ativo</th>
+                <th>Administrador</th>
+                {% if current_user.is_admin %}
+                    <th>Ações</th>
+                {% endif %}
+            </tr>
+            {% for user in users %}
+                <tr>
+                    <td>{{ user.id }}</td>
+                    <td>{{ user.name }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>
+                        {% if user.last_login %}
+                            {{ user.last_login }}
+                        {% else %}
+                            ---
+                        {% endif %}
+                    </td>
+                    <td>{{ user.created_at }}</td>
+                    <td>
+                        {% if user.is_active %}
+                            Sim
+                        {% else %}
+                            Não
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if user.is_admin %}
+                            Sim
+                        {% else %}
+                            Não
+                        {% endif %}
+                    </td>
+                    {% if current_user.is_admin %}
+                        <td>
+                            <a href="{% url 'url_update_user' user.id %}">Editar</a> / <a href="{% url 'url_delete_user' user.id %}">Excluir</a>
+                        </td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+        </table>
+    </fieldset>
+</body>
+</html>
