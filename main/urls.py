@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from app.views import welcome, enter, create_account, exit, home, create_user, read_user, update_user, delete_user, create_group, read_group, update_group, delete_group
+from app.views import welcome, enter, create_account, exit, home, create_user, read_user, update_user, delete_user, create_group, read_group, update_group, delete_group, create_notice, read_notice, update_notice, delete_notice
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -32,4 +32,8 @@ urlpatterns = [
     path('read_group/', read_group, name='url_read_group'),
     path('update_group/<int:pk>/', update_group, name='url_update_group'),
     path('delete_group/<int:pk>/', delete_group, name='url_delete_group'),
+    path('create_notice/', create_notice, name='url_create_notice'),
+    path('read_notice/', read_notice, name='url_read_notice'),
+    path('update_notice/<int:pk>/', update_notice, name='url_update_notice'),
+    path('delete_notice/<int:pk>/', delete_notice, name='url_delete_notice'),
 ]

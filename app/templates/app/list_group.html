@@ -1,58 +1,73 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Raleway"
+    />
     <style>
-        table {
-            font-family: arial, sans-serif;
-            border-collapse: collapse;
-            width: 100%;
-        }
-        td, th {
-            border: 1px solid #dddddd;
-            text-align: left;
-            padding: 8px;
-        }
-        tr:nth-child(even) {
-            background-color: #dddddd;
-        }
-        .limit {
-            max-width: 200px;
-            text-overflow: ellipsis;
-            overflow: hidden;
-            white-space: nowrap;
-        }
+      body,
+      h1,
+      h2,
+      h3,
+      h4,
+      h5 {
+        font-family: "Raleway", sans-serif;
+      }
+      table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+      }
+      td,
+      th {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+      }
+      tr:nth-child(even) {
+        background-color: #dddddd;
+      }
+      .limit {
+        max-width: 200px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <h3><a href="{% url 'url_home' %}">&larr; voltar</a></h3>
     <fieldset>
-        <legend>Lista de grupos</legend>
-        <table>
-            <tr>
-                <th>ID</th>
-                <th>Nome</th>
-                <th>Descrição</th>
-                {% if current_user.is_admin %}
-                    <th>Ações</th>
-                {% endif %}
-            </tr>
-            {% for group in groups %}
-                <tr>
-                    <td>{{ group.id }}</td>
-                    <td>{{ group.name }}</td>
-                    <td class="limit">{{ group.description }}</td>
-                    {% if current_user.is_admin %}
-                        <td>
-                            <a href="{% url 'url_update_group' group.id %}">Editar</a> / <a href="{% url 'url_delete_group' group.id %}">Excluir</a>
-                        </td>
-                    {% endif %}
-                </tr>
-            {% endfor %}
-        </table>
+      <legend>Lista de grupos</legend>
+      <table>
+        <tr>
+          <th>ID</th>
+          <th>Nome</th>
+          <th>Descrição</th>
+          {% if current_user.is_admin %}
+          <th>Ações</th>
+          {% endif %}
+        </tr>
+        {% for group in groups %}
+        <tr>
+          <td>{{ group.id }}</td>
+          <td>{{ group.name }}</td>
+          <td class="limit">{{ group.description }}</td>
+          {% if current_user.is_admin %}
+          <td>
+            <a href="{% url 'url_update_group' group.id %}">Editar</a> /
+            <a href="{% url 'url_delete_group' group.id %}">Excluir</a>
+          </td>
+          {% endif %}
+        </tr>
+        {% endfor %}
+      </table>
     </fieldset>
-</body>
+  </body>
 </html>

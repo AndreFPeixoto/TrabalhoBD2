@@ -1,5 +1,6 @@
+from dataclasses import fields
 from django import forms
-from .models import User, Group
+from .models import User, Group, Notice
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, UserChangeForm
 
 class CreateAccountForm(UserCreationForm):
@@ -31,4 +32,17 @@ class GroupFrom(forms.ModelForm):
         labels = {
             'name': 'Nome',
             'description': 'Descrição'
+        }
+
+class NoticeForm(forms.ModelForm):
+    class Meta:
+        model = Notice
+        fields = ['title', 'description', 'image_url', 'content', 'is_public', 'group']
+        labels = {
+            'title': 'Título',
+            'description': 'Descrição',
+            'image_url': 'URL Imagem',
+            'content': 'Conteúdo',
+            'is_public': 'Pública',
+            'group': 'Grupo'
         }

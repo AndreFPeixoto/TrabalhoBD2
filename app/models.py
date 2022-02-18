@@ -43,3 +43,20 @@ class Group(models.Model):
 
     def __str__(self):
         return self.name
+
+class Notice(models.Model):
+    title = models.CharField(max_length=100)
+    description = models.TextField(null=True, blank=True)
+    image_url = models.URLField(null=True, blank=True)
+    content = models.TextField()
+    is_public = models.BooleanField(default=False)
+    last_modified = models.DateTimeField(auto_now=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    group = models.ForeignKey(Group, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = 'Notícia'
+        verbose_name_plural = 'Notícias'
+
+    def __str__(self):
+        return self.title

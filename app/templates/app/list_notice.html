@@ -22,19 +22,9 @@
     </style>
   </head>
   <body>
+    <h3><a href="{% url 'url_home' %}">&larr; voltar</a></h3>
     <fieldset>
-      <legend>Bem Vindo</legend>
-      <ul>
-        <li>
-          <h3><a href="{% url 'url_enter' %}">Entrar</a></h3>
-        </li>
-        <li>
-          <h3><a href="{% url 'url_create_account' %}">Criar conta</a></h3>
-        </li>
-      </ul>
-    </fieldset>
-    <fieldset>
-      <legend>Notícias públicas</legend>
+      <legend>Lista de notícias</legend>
       {% for notice in notices %}
       <div class="w3-card-4 w3-margin w3-white" style="display: flex">
         {% if notice.image_url %}
@@ -42,7 +32,14 @@
         {% endif %}
         <div>
           <div class="w3-container">
-            <h4><b>{{ notice.title }}</b></h4>
+            <h4><b>{{ notice.title }}</b>
+              {% if current_user.is_admin or current_user.id == notice.user.id %}
+                <span style="margin-left: 30px; font-size: medium;">
+                  <a href="{% url 'url_update_notice' notice.id %}">Editar</a> /
+                  <a href="{% url 'url_delete_notice' notice.id %}">Excluir</a>
+                </span>
+              {% endif %}
+            </h4>
             <p>
               {% if notice.description %} {{ notice.description }}, {% endif %}
               <span class="w3-opacity">{{ notice.last_modified }}</span>
@@ -51,7 +48,7 @@
             <p>
               <b>Autor: </b
               ><span class="w3-opacity">{{ notice.user.name }}</span>
-              <b>Grupo: </b
+              <b style="margin-left: 10px;">Grupo: </b
               ><span class="w3-opacity">{{ notice.group.name }}</span>
             </p>
           </div>

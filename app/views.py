@@ -1,7 +1,7 @@
 from django.shortcuts import redirect, render
 from django.contrib.auth import login, logout
-from app.models import User, Group
-from .forms import CreateAccountForm, EnterForm, UpdateUserForm, GroupFrom
+from app.models import User, Group, Notice
+from .forms import CreateAccountForm, EnterForm, UpdateUserForm, GroupFrom, NoticeForm
 
 # Create your views here.
 def welcome(request):
@@ -146,6 +146,60 @@ def delete_group(request, pk):
             group = Group.objects.get(pk=pk)
             group.delete()
             return redirect('url_read_group')
+        else:
+            return redirect('url_home')
+    else:
+        return redirect('url_welcome')
+
+def create_notice(request):
+    data = {}
+    if request.user.is_authenticated:
+        form = NoticeForm(request.POST or None)
+        if form.is_valid():
+            notice = form.save(commit=False)
+            notice.user = User.objects.get(pk=request.user.id)
+            notice.save()
+            return redirect('url_home')
+        data['form'] = form
+        data['btn_message'] = 'Criar'
+        data['legend'] = 'Criar notícia'
+        return render(request, 'app/form_notice.html', data)
+    else:
+        return redirect('url_welcome')
+
+def read_notice(request):
+    data = {}
+    if request.user.is_authenticated:
+        data['current_user'] = request.user
+        data['notices'] = Notice.objects.all().order_by('-last_modified')[:10]
+        return render(request, 'app/list_notice.html', data)
+    else:
+        return redirect('url_welcome')
+
+def update_notice(request, pk):
+    data = {}
+    if request.user.is_authenticated:
+        notice = Notice.objects.get(pk=pk)
+        if request.user.is_admin or request.user.id == notice.user.id:
+            form = NoticeForm(request.POST or None, instance=notice)
+            if form.is_valid():
+                form.save()
+                return redirect('url_read_notice')
+            data['form'] = form
+            data['btn_message'] = 'Editar'
+            data['legend'] = 'Editar notícia'
+            return render(request, 'app/form_notice.html', data)
+        else:
+            return redirect('url_home')
+    else:
+        return redirect('url_welcome')
+
+def delete_notice(request, pk):
+    if request.user.is_authenticated:
+        notice = Notice.objects.get(pk=pk)
+        if request.user.is_admin or request.user.id == notice.user.id:
+            notice.delete()
+            return redirect('url_read_notice')
         else:
             return redirect('url_home')
     else:
