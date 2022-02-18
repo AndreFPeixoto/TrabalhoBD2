@@ -1,7 +1,7 @@
 from django.shortcuts import redirect, render
 from django.contrib.auth import login, logout
-from app.models import User
-from .forms import CreateAccountForm, EnterForm, UpdateUserForm
+from app.models import User, Group
+from .forms import CreateAccountForm, EnterForm, UpdateUserForm, GroupFrom
 
 # Create your views here.
 def welcome(request):
@@ -75,11 +75,13 @@ def update_user(request, pk):
             form = UpdateUserForm(request.POST or None, instance=user)
             if form.is_valid():
                 form.save()
-                return redirect('url_home')
+                return redirect('url_read_user')
             data['form'] = form
             data['btn_message'] = 'Editar'
             data['legend'] = 'Editar utilizador'
             return render(request, 'app/form_user.html', data)
+        else:
+            return redirect('url_home')
     else:
         return redirect('url_welcome')
 
@@ -89,5 +91,62 @@ def delete_user(request, pk):
             user = User.objects.get(pk=pk)
             user.delete()
             return redirect('url_read_user')
+        else:
+            return redirect('url_home')
+    else:
+        return redirect('url_welcome')
+
+def create_group(request):
+    data = {}
+    if request.user.is_authenticated:
+        if request.user.is_admin:
+            form = GroupFrom(request.POST or None)
+            if form.is_valid():
+                form.save()
+                return redirect('url_home')
+            data['form'] = form
+            data['btn_message'] = 'Criar'
+            data['legend'] = 'Criar grupo'
+            return render(request, 'app/form_group.html', data)
+        else:
+            return redirect('url_home')
+    else:
+        return redirect('url_welcome')
+
+def read_group(request):
+    data = {}
+    if request.user.is_authenticated:
+        data['current_user'] = request.user
+        data['groups'] = Group.objects.all()
+        return render(request, 'app/list_group.html', data)
+    else:
+        return redirect('url_welcome')
+
+def update_group(request, pk):
+    data = {}
+    if request.user.is_authenticated:
+        if request.user.is_admin:
+            group = Group.objects.get(pk=pk)
+            form = GroupFrom(request.POST or None, instance=group)
+            if form.is_valid():
+                form.save()
+                return redirect('url_read_group')
+            data['form'] = form
+            data['btn_message'] = 'Editar'
+            data['legend'] = 'Editar grupo'
+            return render(request, 'app/form_group.html', data)
+        else:
+            return redirect('url_home')
+    else:
+        return redirect('url_welcome')
+
+def delete_group(request, pk):
+    if request.user.is_authenticated:
+        if request.user.is_admin:
+            group = Group.objects.get(pk=pk)
+            group.delete()
+            return redirect('url_read_group')
+        else:
+            return redirect('url_home')
     else:
         return redirect('url_welcome')

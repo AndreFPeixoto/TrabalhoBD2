@@ -53,11 +53,11 @@
         <ul>
             {% if current_user.is_admin %}
                 <li><p>
-                    <a>Criar grupo</a>
+                    <a href="{% url 'url_create_group' %}">Criar grupo</a>
                 </p></li>
             {% endif %}
             <li><p>
-                <a>Listar grupos</a>
+                <a href="{% url 'url_read_group' %}">Listar grupos</a>
             </p></li>
         </ul>
     </fieldset>

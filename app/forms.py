@@ -1,5 +1,5 @@
 from django import forms
-from .models import User
+from .models import User, Group
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, UserChangeForm
 
 class CreateAccountForm(UserCreationForm):
@@ -23,3 +23,12 @@ class UpdateUserForm(UserCreationForm):
     class Meta:
         model = User
         fields = ['name', 'email', 'is_active', 'is_admin']
+
+class GroupFrom(forms.ModelForm):
+    class Meta:
+        model = Group
+        fields = ['name', 'description']
+        labels = {
+            'name': 'Nome',
+            'description': 'Descrição'
+        }
