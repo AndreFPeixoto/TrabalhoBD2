@@ -5,7 +5,9 @@ from .forms import CreateAccountForm, EnterForm, UpdateUserForm, GroupFrom, Noti
 
 # Create your views here.
 def welcome(request):
-    return render(request, 'app/welcome.html')
+    data = {}
+    data['notices'] = Notice.objects.all().order_by('-last_modified')[:10]
+    return render(request, 'app/welcome.html', data)
 
 def enter(request):
     if request.method == 'POST':
@@ -204,3 +206,16 @@ def delete_notice(request, pk):
             return redirect('url_home')
     else:
         return redirect('url_welcome')
+
+# Special views
+def update_current_user(request, pk):
+    pass
+
+def delete_current_user(request, pk):
+    pass
+
+def read_notice_by_user(request, pk):
+    pass
+
+def read_notice_by_group(request, pk):
+    pass

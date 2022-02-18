@@ -36,28 +36,30 @@
     <fieldset>
       <legend>Notícias públicas</legend>
       {% for notice in notices %}
-      <div class="w3-card-4 w3-margin w3-white" style="display: flex">
-        {% if notice.image_url %}
-        <img src="{{ notice.image_url }}" style="width:150px; height:170px;" />
-        {% endif %}
-        <div>
-          <div class="w3-container">
-            <h4><b>{{ notice.title }}</b></h4>
-            <p>
-              {% if notice.description %} {{ notice.description }}, {% endif %}
-              <span class="w3-opacity">{{ notice.last_modified }}</span>
-            </p>
-            <h5>{{ notice.content }}</h5>
-            <p>
-              <b>Autor: </b
-              ><span class="w3-opacity">{{ notice.user.name }}</span>
-              <b>Grupo: </b
-              ><span class="w3-opacity">{{ notice.group.name }}</span>
-            </p>
+        {% if notice.is_public %}
+          <div class="w3-card-4 w3-margin w3-white" style="display: flex">
+            {% if notice.image_url %}
+            <img src="{{ notice.image_url }}" style="width:150px; height:170px;" />
+            {% endif %}
+            <div>
+              <div class="w3-container">
+                <h4><b>{{ notice.title }}</b></h4>
+                <p>
+                  {% if notice.description %} {{ notice.description }}, {% endif %}
+                  <span class="w3-opacity">{{ notice.last_modified }}</span>
+                </p>
+                <h5>{{ notice.content }}</h5>
+                <p>
+                  <b>Autor: </b
+                  ><span class="w3-opacity">{{ notice.user.name }}</span>
+                  <b style="margin-left: 10px;">Grupo: </b
+                  ><span class="w3-opacity">{{ notice.group.name }}</span>
+                </p>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
-      <hr />
+          <hr />
+        {% endif %}
       {% endfor %}
     </fieldset>
   </body>
