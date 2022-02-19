@@ -48,9 +48,7 @@
           <th>Adesão</th>
           <th>Ativo</th>
           <th>Administrador</th>
-          {% if current_user.is_admin %}
           <th>Ações</th>
-          {% endif %}
         </tr>
         {% for user in users %}
           <tr>
@@ -67,12 +65,18 @@
             <td>{{ user.created_at }}</td>
             <td>{% if user.is_active %} Sim {% else %} Não {% endif %}</td>
             <td>{% if user.is_admin %} Sim {% else %} Não {% endif %}</td>
-            {% if current_user.is_admin %}
-              <td>
-                <a href="{% url 'url_update_user' user.id %}">Editar</a> /
-                <a href="{% url 'url_delete_user' user.id %}">Excluir</a>
-              </td>
-            {% endif %}
+            <td>
+              {% if current_user.is_admin %}
+                {% if current_user.id == user.id %}
+                  <a href="{% url 'url_update_current_user' user.id %}">Editar</a> /
+                  <a href="{% url 'url_delete_current_user' user.id %}">Excluir</a> /
+                {% else %}
+                  <a href="{% url 'url_update_user' user.id %}">Editar</a> /
+                  <a href="{% url 'url_delete_user' user.id %}">Excluir</a> /
+                {% endif %}
+              {% endif %}
+              <a href="{% url 'url_read_notice_by_user' user.id %}">Ver Notícias</a>
+            </td>
           </tr>
         {% endfor %}
       </table>

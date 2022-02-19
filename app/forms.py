@@ -25,6 +25,14 @@ class UpdateUserForm(UserCreationForm):
         model = User
         fields = ['name', 'email', 'is_active', 'is_admin']
 
+class UpdateCurrentUserForm(UserCreationForm):
+    name = forms.CharField(label='Nome')
+    email = forms.EmailField(label='E-mail')
+    password2 = forms.CharField(label='Confirmar Password', widget=forms.PasswordInput)
+    class Meta:
+        model = User
+        fields = ['name', 'email']
+
 class GroupFrom(forms.ModelForm):
     class Meta:
         model = Group

@@ -50,21 +50,20 @@
           <th>ID</th>
           <th>Nome</th>
           <th>Descrição</th>
-          {% if current_user.is_admin %}
           <th>Ações</th>
-          {% endif %}
         </tr>
         {% for group in groups %}
         <tr>
           <td>{{ group.id }}</td>
           <td>{{ group.name }}</td>
           <td class="limit">{{ group.description }}</td>
-          {% if current_user.is_admin %}
           <td>
-            <a href="{% url 'url_update_group' group.id %}">Editar</a> /
-            <a href="{% url 'url_delete_group' group.id %}">Excluir</a>
+            {% if current_user.is_admin %}
+              <a href="{% url 'url_update_group' group.id %}">Editar</a> /
+              <a href="{% url 'url_delete_group' group.id %}">Excluir</a> /
+            {% endif %}
+            <a href="{% url 'url_read_notice_by_group' group.id %}">Ver Notícias</a>
           </td>
-          {% endif %}
         </tr>
         {% endfor %}
       </table>

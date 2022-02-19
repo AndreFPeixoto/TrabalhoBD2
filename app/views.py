@@ -1,12 +1,12 @@
 from django.shortcuts import redirect, render
 from django.contrib.auth import login, logout
 from app.models import User, Group, Notice
-from .forms import CreateAccountForm, EnterForm, UpdateUserForm, GroupFrom, NoticeForm
+from .forms import CreateAccountForm, EnterForm, UpdateUserForm, UpdateCurrentUserForm, GroupFrom, NoticeForm
 
 # Create your views here.
 def welcome(request):
     data = {}
-    data['notices'] = Notice.objects.all().order_by('-last_modified')[:10]
+    data['notices'] = Notice.objects.all().order_by('-last_modified')
     return render(request, 'app/welcome.html', data)
 
 def enter(request):
@@ -209,13 +209,59 @@ def delete_notice(request, pk):
 
 # Special views
 def update_current_user(request, pk):
-    pass
+    data = {}
+    if request.user.is_authenticated:
+        user = User.objects.get(pk=pk)
+        user.set_unusable_password()
+        if request.user.is_admin:
+            form = UpdateUserForm(request.POST or None, instance=user)
+            if form.is_valid():
+                current_user = form.save()
+                login(request, current_user)
+                return redirect('url_home')
+        elif request.user.id == user.id:
+            form = UpdateCurrentUserForm(request.POST or None, instance=user)
+            if form.is_valid():
+                current_user = form.save()
+                login(request, current_user)
+                return redirect('url_home')
+        else:
+            return redirect('url_home')
+        data['form'] = form
+        data['btn_message'] = 'Editar'
+        data['legend'] = 'Editar utilizador'
+        return render(request, 'app/form_user.html', data)
+    else:
+        return redirect('url_welcome')
 
 def delete_current_user(request, pk):
-    pass
+    if request.user.is_authenticated:
+        user = User.objects.get(pk=pk)
+        if request.user.id == user.id:
+            logout(request)
+            user.delete()
+            return redirect('url_welcome')
+        else:
+            return redirect('url_home')
+    else:
+        return redirect('url_welcome')
 
 def read_notice_by_user(request, pk):
-    pass
+    data = {}
+    if request.user.is_authenticated:
+        user = User.objects.get(pk=pk)
+        data['current_user'] = request.user
+        data['notices'] = Notice.objects.filter(user=user).order_by('-last_modified')[:10]
+        return render(request, 'app/list_notice.html', data)
+    else:
+        return redirect('url_welcome')
 
 def read_notice_by_group(request, pk):
-    pass
+    data = {}
+    if request.user.is_authenticated:
+        group = Group.objects.get(pk=pk)
+        data['current_user'] = request.user
+        data['notices'] = Notice.objects.filter(group=group).order_by('-last_modified')[:10]
+        return render(request, 'app/list_notice.html', data)
+    else:
+        return redirect('url_welcome')
