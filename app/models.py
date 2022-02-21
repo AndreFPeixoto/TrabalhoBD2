@@ -52,7 +52,7 @@ class Notice(models.Model):
     is_public = models.BooleanField(default=False)
     last_modified = models.DateTimeField(auto_now=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    group = models.ForeignKey(Group, on_delete=models.CASCADE)
+    group = models.ForeignKey(Group, on_delete=models.CASCADE, null=True, blank=True)
 
     class Meta:
         verbose_name = 'Notícia'

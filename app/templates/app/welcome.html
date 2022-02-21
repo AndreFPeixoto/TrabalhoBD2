@@ -52,8 +52,10 @@
                 <p>
                   <b>Autor: </b
                   ><span class="w3-opacity">{{ notice.user.name }}</span>
-                  <b style="margin-left: 10px;">Grupo: </b
-                  ><span class="w3-opacity">{{ notice.group.name }}</span>
+                  {% if notice.group %}
+                    <b style="margin-left: 10px;">Grupo: </b
+                      ><span class="w3-opacity">{{ notice.group.name }}</span>
+                  {% endif %}
                 </p>
               </div>
             </div>

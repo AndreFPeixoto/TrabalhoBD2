@@ -1,7 +1,7 @@
 from django.shortcuts import redirect, render
 from django.contrib.auth import login, logout
 from app.models import User, Group, Notice
-from .forms import CreateAccountForm, EnterForm, UpdateUserForm, UpdateCurrentUserForm, GroupFrom, NoticeForm
+from .forms import CreateAccountForm, CreateAccountAsAdminForm, EnterForm, UpdateUserForm, UpdateCurrentUserForm, GroupFrom, NoticeForm
 
 # Create your views here.
 def welcome(request):
@@ -45,17 +45,30 @@ def exit(request):
 def create_user(request):
     data = {}
     if request.user.is_authenticated:
-        if request.method == 'POST':
-            form = CreateAccountForm(request.POST)
-            if form.is_valid():
-                form.save()
-                return redirect('url_home')
+        if request.user.is_admin:
+            if request.method == 'POST':
+                form = CreateAccountAsAdminForm(request.POST)
+                if form.is_valid():
+                    form.save()
+                    return redirect('url_home')
+            else:
+                form = CreateAccountAsAdminForm()
+            data['form'] = form
+            data['btn_message'] = 'Criar'
+            data['legend'] = 'Criar utilizador'
+            return render(request, 'app/form_user.html', data)
         else:
-            form = CreateAccountForm()
-        data['form'] = form
-        data['btn_message'] = 'Criar'
-        data['legend'] = 'Criar utilizador'
-        return render(request, 'app/form_user.html', data)
+            if request.method == 'POST':
+                form = CreateAccountForm(request.POST)
+                if form.is_valid():
+                    form.save()
+                    return redirect('url_home')
+            else:
+                form = CreateAccountForm()
+            data['form'] = form
+            data['btn_message'] = 'Criar'
+            data['legend'] = 'Criar utilizador'
+            return render(request, 'app/form_user.html', data)
     else:
         return redirect('url_welcome')
         
