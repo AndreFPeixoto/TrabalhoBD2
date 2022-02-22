@@ -45,30 +45,17 @@ def exit(request):
 def create_user(request):
     data = {}
     if request.user.is_authenticated:
-        if request.user.is_admin:
-            if request.method == 'POST':
-                form = CreateAccountAsAdminForm(request.POST)
-                if form.is_valid():
-                    form.save()
-                    return redirect('url_home')
-            else:
-                form = CreateAccountAsAdminForm()
-            data['form'] = form
-            data['btn_message'] = 'Criar'
-            data['legend'] = 'Criar utilizador'
-            return render(request, 'app/form_user.html', data)
+        if request.method == 'POST':
+            form = CreateAccountForm(request.POST)
+            if form.is_valid():
+                form.save()
+                return redirect('url_home')
         else:
-            if request.method == 'POST':
-                form = CreateAccountForm(request.POST)
-                if form.is_valid():
-                    form.save()
-                    return redirect('url_home')
-            else:
-                form = CreateAccountForm()
-            data['form'] = form
-            data['btn_message'] = 'Criar'
-            data['legend'] = 'Criar utilizador'
-            return render(request, 'app/form_user.html', data)
+            form = CreateAccountForm()
+        data['form'] = form
+        data['btn_message'] = 'Criar'
+        data['legend'] = 'Criar utilizador'
+        return render(request, 'app/form_user.html', data)
     else:
         return redirect('url_welcome')
         
